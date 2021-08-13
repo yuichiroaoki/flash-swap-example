@@ -24,7 +24,7 @@ ALCHEMY_MAINNET_RPC_URL='<your-own-alchemy-mainnet-rpc-url>'
 ```
 
 ### 2. Install Dependencies
-run the following command.
+Run the following command.
 ```console
 yarn install
 ```

@@ -4,8 +4,8 @@ import { getErc20Balance, showErc20Balance } from "../utils/token";
 import { DAI, KYBER_ADDRESS, SWAP_ROUTER, UNI, uniswapv3factory, USDC, weth9 } from "./address";
 
 async function main(
-	baseTokenAddress: string,
-	swapTokenAddress: string,
+	borrowingTokenAddress: string,
+	swapingPairTokenAddress: string,
 	isUniKyb: Boolean,
 	amount: number
 ) {
@@ -19,19 +19,19 @@ async function main(
 
 	const DECIMALS = 18
 
-	let token0: any;
-	let token1: any;
-	token0 = new ethers.Contract(swapTokenAddress, IERC20.abi, provider)
-	token1 = new ethers.Contract(baseTokenAddress, IERC20.abi, provider)
+	let swapingPairToken: any;
+	let borrowingToken: any;
+	swapingPairToken = new ethers.Contract(swapingPairTokenAddress, IERC20.abi, provider)
+	borrowingToken = new ethers.Contract(borrowingTokenAddress, IERC20.abi, provider)
 
-	const initialBalance = await getErc20Balance(token1, deployer.address, DECIMALS)
+	const initialBalance = await getErc20Balance(borrowingToken, deployer.address, DECIMALS)
 	console.log("deployer's initial balance", initialBalance)
 
 	// borrow from token0, token1 fee1 pool
 	const tx = await contract.initFlash({
-		token0: ethers.utils.getAddress(baseTokenAddress), //DAI
+		token0: ethers.utils.getAddress(borrowingTokenAddress), //DAI
 		token1: ethers.utils.getAddress(USDC),
-		token2: ethers.utils.getAddress(swapTokenAddress), //UNI
+		token2: ethers.utils.getAddress(swapingPairTokenAddress), //UNI
 		fee1: 500,
 		amount0: ethers.utils.parseUnits(amount.toString(), DECIMALS),
 		amount1: 0,
@@ -39,7 +39,7 @@ async function main(
 		unikyb: isUniKyb,
 	})
 
-	const endingBalance = await getErc20Balance(token1, deployer.address, DECIMALS)
+	const endingBalance = await getErc20Balance(borrowingToken, deployer.address, DECIMALS)
 	console.log("deployer's ending balance", endingBalance)
 
 	const profit = endingBalance - initialBalance
