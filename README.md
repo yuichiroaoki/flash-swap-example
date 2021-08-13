@@ -1,5 +1,5 @@
-# Flash Swap Examples
-Examples of Flash Swaps
+# Flash Swap Example
+Example of Flash Swaps
 
 ## Installation and Setup
 
@@ -25,19 +25,19 @@ ALCHEMY_MAINNET_RPC_URL='<your-own-alchemy-mainnet-rpc-url>'
 
 ### 2. Install Dependencies
 run the following command.
-```sh
+```console
 yarn install
 ```
 
 ### 3. Compile Smart Contracts
 Run the following command.
-```sh
+```console
 yarn compile
 ```
 
 ### 4. Execute Flash Swaps 🔥
 Run the following command.
-```sh
+```console
 yarn flashswaps
 ```
 
