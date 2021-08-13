@@ -5,7 +5,7 @@ import * as IERC20 from "../artifacts/@openzeppelin/contracts/token/ERC20/IERC20
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { DAI, KYBER_ADDRESS, SWAP_ROUTER, UNI, uniswapv3factory, USDC, WBTC, weth9, WETH_WHALE } from "../scripts/address";
 import { BigNumber, Contract } from "ethers";
-import { getErc20Balance, impersonateFundErc20 } from "../utils/token";
+import { showErc20Balance, impersonateFundErc20 } from "../utils/token";
 import { getTransactionFee } from "../utils/eth";
 
 describe("FlashSwaps", async () => {

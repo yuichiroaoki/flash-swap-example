@@ -1,7 +1,7 @@
 import { ethers } from "hardhat";
 import * as IERC20 from "../artifacts/@openzeppelin/contracts/token/ERC20/IERC20.sol/IERC20.json";
-import { getErc20Balance, impersonateFundErc20 } from "../utils/token";
-import { DAI, KYBER_ADDRESS, SWAP_ROUTER, UNI, uniswapv3factory, USDC, weth9, WETH_WHALE } from "./address";
+import { getErc20Balance, showErc20Balance } from "../utils/token";
+import { DAI, KYBER_ADDRESS, SWAP_ROUTER, UNI, uniswapv3factory, USDC, weth9 } from "./address";
 
 async function main(
 	baseTokenAddress: string,
@@ -24,16 +24,8 @@ async function main(
 	token0 = new ethers.Contract(swapTokenAddress, IERC20.abi, provider)
 	token1 = new ethers.Contract(baseTokenAddress, IERC20.abi, provider)
 
-	deployer.getBalance().then(value => {
-		console.log("initial account balance:", ethers.utils.formatEther(value));
-	})
-
-	await impersonateFundErc20(token1, WETH_WHALE, contract.address, "500.0")
-
-	await getErc20Balance(token1, contract.address, "base", DECIMALS)
-	await getErc20Balance(token1, deployer.address, "deployer base", DECIMALS)
-	await getErc20Balance(token0, contract.address, "swap", DECIMALS)
-	await getErc20Balance(token0, deployer.address, "deployer swap", DECIMALS)
+	const initialBalance = await getErc20Balance(token1, deployer.address, DECIMALS)
+	console.log("deployer's initial balance", initialBalance)
 
 	// borrow from token0, token1 fee1 pool
 	const tx = await contract.initFlash({
@@ -47,14 +39,14 @@ async function main(
 		unikyb: isUniKyb,
 	})
 
-	deployer.getBalance().then(value => {
-		console.log("last account balance:", ethers.utils.formatEther(value));
-	})
+	const endingBalance = await getErc20Balance(token1, deployer.address, DECIMALS)
+	console.log("deployer's ending balance", endingBalance)
 
-	await getErc20Balance(token1, contract.address, "contract base", DECIMALS)
-	await getErc20Balance(token1, deployer.address, "deployer base", DECIMALS)
-	await getErc20Balance(token0, contract.address, "contract swap", DECIMALS)
-	await getErc20Balance(token0, deployer.address, "deployer swap", DECIMALS)
+	const profit = endingBalance - initialBalance
+
+	if (profit>0) {
+		console.log(`Congrats! You earned ${profit} DAI !!`)
+	}
 
 }
 

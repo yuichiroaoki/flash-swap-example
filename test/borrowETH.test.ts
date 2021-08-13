@@ -4,7 +4,7 @@ import { Development__factory, Development } from "../typechain";
 import * as IERC20 from "../artifacts/@openzeppelin/contracts/token/ERC20/IERC20.sol/IERC20.json";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { KYBER_ADDRESS, SWAP_ROUTER, UNI, uniswapv3factory, USDT, weth9, WETH_WHALE } from "../scripts/address";
-import { getErc20Balance, impersonateFundErc20 } from "../utils/token";
+import { showErc20Balance, impersonateFundErc20 } from "../utils/token";
 import { getTransactionFee } from "../utils/eth";
 import { BigNumber, Contract } from "ethers";
 

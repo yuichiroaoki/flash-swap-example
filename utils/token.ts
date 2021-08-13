@@ -1,7 +1,7 @@
 import { network, ethers } from "hardhat";
 import { Contract } from "ethers";
 
-export const getErc20Balance = async (
+export const showErc20Balance = async (
 	contract: Contract, address: string, name: string, decimals: number
 ) => {
 
@@ -10,6 +10,17 @@ export const getErc20Balance = async (
 	])
 
 	console.log(name, ethers.utils.formatUnits(balance, decimals))
+}
+
+export const getErc20Balance = async (
+	contract: Contract, address: string, decimals: number
+): Promise<number> => {
+
+	const [balance] = await Promise.all([
+		contract.balanceOf(address),
+	])
+
+	return parseFloat(ethers.utils.formatUnits(balance, decimals))
 }
 
 export const fundErc20 = async (
